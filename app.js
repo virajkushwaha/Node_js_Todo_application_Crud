@@ -53,7 +53,7 @@ app.get('/todos/', async (request, response) => {
   }
 
   switch (true) {
-    case hasPriorityAndStatusProperties(request.query): 
+    case hasPriorityAndStatusProperties(request.query):
       getTodosQuery = `
                 SELECT
                     *
@@ -63,7 +63,7 @@ app.get('/todos/', async (request, response) => {
                     todo LIKE '%${search_q}%'
                     AND status = '${status}'
                     AND priority = '${priority}';`
-      break;
+      break
     case hasPriorityProperty(request.query):
       getTodosQuery = `
             SELECT
@@ -97,10 +97,10 @@ app.get('/todos/', async (request, response) => {
   data = await db.all(getTodosQuery)
   response.send(
     data.map(eachData => ({
-      id: eachData.ID,
-      todo: eachData.TODO,
-      priority: eachData.PRIORITY,
-      status: eachData.STATUS,
+      id: eachData.id,
+      todo: eachData.todo,
+      priority: eachData.priority,
+      status: eachData.status,
     })),
   )
 })
@@ -118,10 +118,10 @@ app.get('/todos/:todoId/', async (req, res) => {
 
   const dt = await db.get(query)
   res.send({
-    id: dt.ID,
-    todo: dt.TODO,
-    priority: dt.PRIORITY,
-    status: dt.STATUS,
+    id: dt.id,
+    todo: dt.todo,
+    priority: dt.priority,
+    status: dt.status,
   })
 })
 
@@ -179,7 +179,7 @@ app.put('/todos/:todoId', async (req, res) => {
           id = ${todoId};
       `
       getText = 'Priority Updated'
-        break
+      break
     case hasStatus(req.body):
       updateQuery = `
         UPDATE todo 
@@ -196,13 +196,13 @@ app.put('/todos/:todoId', async (req, res) => {
   await res.send(getText)
 })
 
-app.delete('/todos/:todoId/',  (req, res) => {
+app.delete('/todos/:todoId/', (req, res) => {
   const {todoId} = req.params
   const deleteQuery = `
   DELETE FROM TODO WHERE ID = ${todoId}
   `
-   db.run(deleteQuery)
-   res.send('Todo Deleted')
+  db.run(deleteQuery)
+  res.send('Todo Deleted')
 })
 
 module.exports = app
